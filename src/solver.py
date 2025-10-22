@@ -186,4 +186,4 @@ def compare_methods(num_jobs, num_machines, num_baseline_runs=10):
 
 if __name__ == '__main__':
     # 主程式入口，直接調用比較函式
-    compare_methods(num_jobs=25, num_machines=8, num_baseline_runs=10)
+    compare_methods(num_jobs=50, num_machines=10, num_baseline_runs=20)
