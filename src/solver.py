@@ -1,3 +1,7 @@
+# ^^^ 這個魔法指令會把這個儲存格的「所有內容」，
+#     「寫入」到 /content/my-first-project/src/solver.py 檔案中
+
+# --- 這是你原本的程式碼，我們只是在其中加入了一行 print ---
 import random
 import math
 import time
@@ -35,7 +39,7 @@ def neighbor_swap(perm):
     return new
 
 # ===================================================================
-# == Part 2: Machine Learning Sampler (Placeholder)              ==
+# == Part 2: Machine Learning Sampler (Placeholder)            ==
 # ===================================================================
 
 class MLInverseSampler:
@@ -47,7 +51,6 @@ class MLInverseSampler:
     def train(self, examples):
         """佔位符訓練函式：將好的範例加入我們的菁英庫。"""
         self.elite_archive.extend(examples)
-        # 簡單去重並限制菁英庫大小，防止無限增長
         unique_perms = list(set(tuple(p) for p in self.elite_archive))
         self.elite_archive = [list(p) for p in unique_perms[:50]] # 最多保留50個菁英解
         
@@ -72,6 +75,11 @@ class MLInverseSampler:
 
 def simulated_annealing(jobs, num_machines, start_perm=None, T0=100.0, alpha=0.995, steps=5000):
     """使用模擬退火演算法尋找最佳的工作排序。"""
+    
+    # +++++++++ 我們新增的修改 ++++++++++
+    print("--- 正在執行「來自 Colab 修改版」的 solver！ ---")
+    # +++++++++++++++++++++++++++++++++
+    
     n = len(jobs)
     current_perm = start_perm[:] if start_perm else random.sample(range(n), n)
     current_makespan = calculate_makespan(current_perm, jobs, num_machines)
@@ -110,7 +118,7 @@ def run_hybrid_optimization(jobs, num_jobs, num_machines, cycles, sa_runs, sa_st
     return overall_best_makespan, sampler
 
 # ===================================================================
-# == Part 5: Evaluation Helpers & Comparison Framework           ==
+# == Part 5: Evaluation Helpers & Comparison Framework             ==
 # ===================================================================
 
 def kendall_distance(p, q):
@@ -135,8 +143,6 @@ def compare_methods(num_jobs, num_machines, num_baseline_runs=10):
     jobs = create_random_instance(num_jobs, num_machines)
     print(f"已生成一個用於比較的通用問題實例 ({num_jobs} 個工作, {num_machines} 台機器)。\n")
 
-    # 調整參數以確保總計算量大致相等
-    # 總計算量 ≈ 運行次數 * 每次運行的步數
     baseline_steps = 50000
     hybrid_cycles = 4
     hybrid_runs_per_cycle = 5
@@ -177,7 +183,6 @@ def compare_methods(num_jobs, num_machines, num_baseline_runs=10):
     print(f"  ⏱️  總耗時: {hybrid_time:.2f} 秒")
     print(f"  🏆 最佳 Makespan: {hybrid_best_makespan}")
     
-    # 使用評估工具分析 ML 採樣器的特性
     samples = trained_sampler.sample(50)
     distances = [kendall_distance(samples[i], samples[j]) for i in range(len(samples)) for j in range(i + 1, len(samples))]
     print(f"  🧬 ML 採樣器生成解的多樣性 (平均肯德爾距離): {np.mean(distances):.3f}")
@@ -186,4 +191,4 @@ def compare_methods(num_jobs, num_machines, num_baseline_runs=10):
 
 if __name__ == '__main__':
     # 主程式入口，直接調用比較函式
-    compare_methods(num_jobs=50, num_machines=10, num_baseline_runs=20)
+    compare_methods(num_jobs=25, num_machines=8, num_baseline_runs=10)
